@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public int pointsWorth = 1; 
     private int score;
 
+    private bool smokeCleared = true;
+
     void Awake(){
         spawner = GameObject.Find("Spawner").GetComponent<Spawner>();
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
@@ -36,7 +38,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (!gameStarted){
-            if(Input.anyKeyDown){
+            if(Input.anyKeyDown && smokeCleared){
+                smokeCleared = false;
                 ResetGame();
             }
         } else{
@@ -74,6 +77,11 @@ public class GameManager : MonoBehaviour
         spawner.active = false;
         gameStarted = false;
 
+        Invoke("SplashScreen", 2f);
+    }
+
+    void SplashScreen(){
+        smokeCleared = true;
         splash.SetActive(true);
     }
 }
